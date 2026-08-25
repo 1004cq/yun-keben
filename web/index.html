@@ -1,182 +1,136 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>云课本</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #f4f1ea; --paper: #fffdf8; --ink: #1c1915; --muted: #6b6458;
-      --line: #e6dfd2; --accent: #c45c26; --font: "Noto Sans SC", system-ui, sans-serif; --motion: 180ms ease;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font); }
-    body { min-height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-    button {
-      appearance: none; border: 0; font: inherit; cursor: pointer; min-height: 44px; padding: 0 14px; border-radius: 12px;
-      display: inline-flex; align-items: center; justify-content: center;
-    }
-    button:focus-visible, input:focus-visible, .chip:focus-visible, .poster:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .btn-primary { background: #fff; color: var(--ink); font-weight: 600; }
-    .btn-ghost { background: #2a2622; color: #f4f1ea; }
-    header { z-index: 20; background: color-mix(in srgb, var(--bg) 92%, transparent); border-bottom: 1px solid var(--line); }
-    .bar { padding: calc(8px + env(safe-area-inset-top)) 14px 8px; display: grid; grid-template-columns: 1fr auto; gap: 8px; }
-    .brand { font-weight: 700; letter-spacing: .06em; }
-    .brand small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
-    .search { grid-column: 1 / -1; min-height: 40px; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 0 14px; font: inherit; }
-    .chips { display: flex; gap: 8px; overflow-x: auto; padding: 8px 14px 0; }
-    .chips::-webkit-scrollbar, .rail::-webkit-scrollbar { display: none; }
-    .chip { flex: 0 0 auto; min-height: 32px; padding: 0 12px; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; font-size: 13px; }
-    .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-    main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-    .hero { flex: 1; min-height: 0; position: relative; margin: 10px 14px 0; border-radius: 18px; overflow: hidden; color: #f8f1e6; box-shadow: 0 16px 40px rgba(40,28,16,.16); }
-    .hero .bg { position: absolute; inset: 0; }
-    .hero .veil { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 20%, rgba(12,10,8,.82) 100%); }
-    .hero .copy { position: absolute; left: 18px; right: 18px; bottom: 16px; }
-    .hero .copy .sub { font-size: 12px; opacity: .8; }
-    .hero h1 { margin: 6px 0 8px; font-size: clamp(22px, 6vw, 34px); line-height: 1.25; }
-    .hero .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .rail-wrap { padding: 12px 0 calc(10px + env(safe-area-inset-bottom)); }
-    .rail-label { padding: 0 16px 8px; font-size: 13px; color: var(--muted); }
-    .rail-label b { color: var(--ink); font-weight: 600; }
-    .rail { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; padding: 4px calc(50vw - 52px) 8px; }
-    .poster { scroll-snap-align: center; flex: 0 0 104px; height: 146px; padding: 0; border: 0; border-radius: 4px 10px 10px 4px; color: #f8f1e6; text-align: left; position: relative; overflow: hidden; transform: scale(.9); opacity: .7; transition: transform var(--motion), opacity var(--motion), box-shadow var(--motion); }
-    .poster.on { transform: scale(1); opacity: 1; box-shadow: 0 0 0 2px var(--ink); }
-    .poster .spine { position: absolute; inset: 0 auto 0 0; width: 8px; background: rgba(0,0,0,.28); }
-    .poster .t { position: absolute; left: 12px; right: 8px; bottom: 8px; top: 10px; display: flex; flex-direction: column; font-size: 11px; }
-    .poster .t strong { margin-top: auto; font-size: 12px; line-height: 1.3; }
-    @media (prefers-reduced-motion: reduce) { .poster, .poster.on { transition: none; transform: none; } }
-    #viewer { display: none; position: fixed; inset: 0; z-index: 50; background: #161411; flex-direction: column; }
-    #viewer.show { display: flex; }
-    .vbar { display: flex; align-items: center; gap: 8px; touch-action: none; padding: calc(8px + env(safe-area-inset-top)) 10px 8px; color: #f4f1ea; }
-    .vbar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
-    iframe { border: 0; flex: 1; width: 100%; background: #2a2622; }
-    .empty { margin: auto; color: var(--muted); }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>云课本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#f4f1ea;--paper:#fffdf8;--ink:#1c1915;--muted:#6b6458;--line:#e6dfd2;--accent:#c45c26;--font:"Noto Sans SC",system-ui,sans-serif;--motion:180ms ease}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.5 var(--font)}
+body{min-height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+button{appearance:none;border:0;font:inherit;cursor:pointer;min-height:44px;padding:0 14px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center}
+button:focus-visible,input:focus-visible,.chip:focus-visible,.poster:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-primary{background:#fff;color:var(--ink);font-weight:600}.btn-ghost{background:#2a2622;color:#f4f1ea}
+header{z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);border-bottom:1px solid var(--line)}
+.bar{padding:calc(8px + env(safe-area-inset-top)) 14px 8px;display:grid;grid-template-columns:1fr auto;gap:8px}
+.brand{font-weight:700;letter-spacing:.06em}.brand small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.search{grid-column:1/-1;min-height:40px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:0 14px;font:inherit}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:8px 14px 0}.chips::-webkit-scrollbar,.rail::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;min-height:32px;padding:0 12px;border:1px solid var(--line);background:var(--paper);border-radius:999px;font-size:13px}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+main{flex:1;min-height:0;display:flex;flex-direction:column}
+.hero{flex:1;min-height:0;position:relative;margin:10px 14px 0;border-radius:18px;overflow:hidden;color:#f8f1e6;box-shadow:0 16px 40px rgba(40,28,16,.16)}
+.hero .bg{position:absolute;inset:0}.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(12,10,8,.82) 100%)}
+.hero .copy{position:absolute;left:18px;right:18px;bottom:16px}.hero .sub{font-size:12px;opacity:.8}.hero h1{margin:6px 0 8px;font-size:clamp(22px,6vw,34px);line-height:1.25}.hero .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rail-wrap{padding:12px 0 calc(10px + env(safe-area-inset-bottom))}.rail-label{padding:0 16px 8px;font-size:13px;color:var(--muted)}.rail-label b{color:var(--ink);font-weight:600}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:4px calc(50vw - 52px) 8px}
+.poster{scroll-snap-align:center;flex:0 0 104px;height:146px;padding:0;border:0;border-radius:4px 10px 10px 4px;color:#f8f1e6;text-align:left;position:relative;overflow:hidden;transform:scale(.9);opacity:.7;transition:transform var(--motion),opacity var(--motion),box-shadow var(--motion)}
+.poster.on{transform:scale(1);opacity:1;box-shadow:0 0 0 2px var(--ink)}
+.poster .spine{position:absolute;inset:0 auto 0 0;width:8px;background:rgba(0,0,0,.28)}
+.poster .t{position:absolute;left:12px;right:8px;bottom:8px;top:10px;display:flex;flex-direction:column;font-size:11px}.poster .t strong{margin-top:auto;font-size:12px;line-height:1.3}
+@media (prefers-reduced-motion:reduce){.poster,.poster.on{transition:none;transform:none}}
+#viewer{display:none;position:fixed;inset:0;z-index:50;background:#161411;flex-direction:column}#viewer.show{display:flex}
+.vbar{display:flex;align-items:center;gap:8px;touch-action:none;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;color:#f4f1ea}
+.vbar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+iframe{border:0;flex:1;width:100%;background:#2a2622}.empty{margin:auto;color:var(--muted)}
+</style>
 </head>
 <body>
-  <header>
-    <div class="bar">
-      <div class="brand">云课本<small id="sub"></small></div>
-      <input class="search" id="q" type="search" placeholder="搜索科目、人教版、年级…" enterkeyhint="search" />
-    </div>
-    <div class="chips" id="stages"></div>
-    <div class="chips" id="subjects"></div>
-  </header>
-  <main>
-    <section class="hero" id="hero">
-      <div class="bg" id="heroBg"></div><div class="veil"></div>
-      <div class="copy">
-        <div class="sub" id="heroSub"></div>
-        <h1 id="heroTitle">选一本书</h1>
-        <div class="row"><button class="btn-primary" id="readBtn" type="button">阅读</button><span id="heroMeta"></span></div>
-      </div>
-    </section>
-    <section class="rail-wrap">
-      <div class="rail-label" id="hint">左右滑动选封面</div>
-      <div class="rail" id="rail"></div>
-    </section>
-  </main>
-  <div id="viewer">
-    <div class="vbar" id="vbar">
-      <button class="btn-ghost" id="prev" type="button">上本</button>
-      <button class="btn-ghost" id="close" type="button">关闭</button>
-      <span id="vtitle"></span>
-      <button class="btn-ghost" id="next" type="button">下本</button>
-    </div>
-    <iframe id="frame" title="课本阅读"></iframe>
-  </div>
-  <script src="./config.js"></script>
-  <script>
-    const cfg = window.KEBEN_CONFIG || {};
-    const state = { books: [], stage: "全部", subject: "全部", q: "", idx: 0, view: -1 };
-    const tones = ["#6b3a22","#2f4a3c","#3a3f63","#5a3d2b","#1f4a5a","#4a2f3e"];
-    document.title = cfg.title || "云课本";
-    document.getElementById("sub").textContent = cfg.subtitle || "";
-    function encodePath(p){return String(p||"").split("/").map(encodeURIComponent).join("/");}
-    function fileUrl(book){
-      const {owner,repo,branch}=cfg.github||{};
-      if(cfg.storage==="cos"&&cfg.cosBase) return cfg.cosBase.replace(/\/$/,"")+"/"+encodePath(book.path);
-      const raw=book.split&&book.parts&&book.parts[0]?book.parts[0]:book.path;
-      if(cfg.storage==="jsdelivr") return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${encodePath(raw)}`;
-      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodePath(raw)}`;
-    }
-    function fmtSize(n){if(!n)return"";return n>1e6?(n/1e6).toFixed(1)+" MB":Math.ceil(n/1024)+" KB";}
-    function shortName(name){return String(name||"").replace(/^义务教育教科书[·\s]*/,"").replace(/\.pdf$/i,"");}
-    function tone(b){const s=(b.subject||b.name||"");let n=0;for(let i=0;i<s.length;i++)n+=s.charCodeAt(i);return tones[n%tones.length];}
-    function paint(el,b){el.style.background="linear-gradient(160deg,"+tone(b)+",#1c1915)";}
-    function filtered(){return state.books.filter((b)=>{
-      if(state.stage!=="全部"&&b.stage!==state.stage)return false;
-      if(state.subject!=="全部"&&b.subject!==state.subject)return false;
-      if(!state.q)return true;
-      return [b.name,b.stage,b.subject,b.edition].join(" ").toLowerCase().includes(state.q.toLowerCase());
-    });}
-    function canRead(b){return !!(b&&!(b.split&&cfg.storage!=="cos"));}
-    function chips(el,items,current,onpick){el.innerHTML="";items.forEach((name)=>{const b=document.createElement("button");b.type="button";b.className="chip"+(name===current?" on":"");b.textContent=name;b.onclick=()=>onpick(name);el.appendChild(b);});}
-    function setHero(b){
-      if(!b){document.getElementById("heroTitle").textContent="没有匹配的课本";document.getElementById("heroSub").textContent="";document.getElementById("heroMeta").textContent="";document.getElementById("readBtn").disabled=true;return;}
-      paint(document.getElementById("heroBg"),b);
-      document.getElementById("heroSub").textContent=[b.stage,b.subject,b.edition].filter(Boolean).join(" · ");
-      document.getElementById("heroTitle").textContent=shortName(b.name);
-      document.getElementById("heroMeta").textContent=fmtSize(b.size);
-      document.getElementById("readBtn").disabled=!canRead(b);
-    }
-    function render(){
-      const books=filtered();
-      chips(document.getElementById("stages"),["全部",...[...new Set(state.books.map((b)=>b.stage).filter(Boolean))]],state.stage,(v)=>{state.stage=v;state.subject="全部";state.idx=0;render();});
-      const pool=state.stage==="全部"?state.books:state.books.filter((b)=>b.stage===state.stage);
-      chips(document.getElementById("subjects"),["全部",...[...new Set(pool.map((b)=>b.subject).filter(Boolean))]],state.subject,(v)=>{state.subject=v;state.idx=0;render();});
-      const rail=document.getElementById("rail");rail.innerHTML="";
-      books.forEach((b,i)=>{
-        const el=document.createElement("button");el.type="button";el.className="poster"+(i===state.idx?" on":"");paint(el,b);
-        el.innerHTML='<span class="spine"></span><span class="t"><span>'+(b.subject||"")+'</span><strong>'+shortName(b.name)+'</strong></span>';
-        el.onclick=()=>{if(state.idx===i&&canRead(b))openAt(i);else{state.idx=i;sync(true);}};
-        rail.appendChild(el);
-      });
-      if(!books.length)rail.innerHTML='<div class="empty">没有课本</div>';
-      sync(false);
-    }
-    function sync(smooth){
-      const books=filtered();const b=books[state.idx];setHero(b);
-      [...document.getElementById("rail").children].forEach((el,i)=>el.classList.toggle("on",i===state.idx));
-      document.getElementById("hint").innerHTML=b?("左右滑封面　<b>"+(state.idx+1)+"</b> / "+books.length):"没有匹配";
-      const el=document.getElementById("rail").children[state.idx];
-      if(el)el.scrollIntoView({inline:"center",block:"nearest",behavior:smooth?"smooth":"instant"});
-    }
-    function nearest(){
-      const rail=document.getElementById("rail");const mid=rail.scrollLeft+rail.clientWidth/2;let best=0,dist=Infinity;
-      [...rail.children].forEach((el,i)=>{const c=el.offsetLeft+el.offsetWidth/2;const d=Math.abs(c-mid);if(d<dist){dist=d;best=i;}});return best;
-    }
-    let tick=0;
-    document.getElementById("rail").addEventListener("scroll",()=>{clearTimeout(tick);tick=setTimeout(()=>{state.idx=nearest();sync(false);},50);},{passive:true});
-    document.getElementById("q").addEventListener("input",(e)=>{state.q=e.target.value.trim();state.idx=0;render();});
-    document.getElementById("readBtn").onclick=()=>openAt(state.idx);
-    document.addEventListener("keydown",(e)=>{
-      if(document.getElementById("viewer").classList.contains("show")){if(e.key==="ArrowLeft")step(-1);if(e.key==="ArrowRight")step(1);if(e.key==="Escape")closeView();return;}
-      if(e.key==="ArrowLeft"){state.idx=Math.max(0,state.idx-1);sync(true);} if(e.key==="ArrowRight"){state.idx=Math.min(filtered().length-1,state.idx+1);sync(true);} if(e.key==="Enter")openAt(state.idx);
-    });
-    function openAt(i){const books=filtered();const b=books[i];if(!canRead(b))return;state.view=i;state.idx=i;
-      document.getElementById("vtitle").textContent=shortName(b.name);
-      document.getElementById("frame").src="https://mozilla.github.io/pdf.js/web/viewer.html?file="+encodeURIComponent(fileUrl(b));
-      document.getElementById("viewer").classList.add("show");sync(true);}
-    function closeView(){document.getElementById("viewer").classList.remove("show");document.getElementById("frame").src="about:blank";state.view=-1;}
-    function step(d){const books=filtered();let i=state.view+d;while(i>=0&&i<books.length&&!canRead(books[i]))i+=d;if(i>=0&&i<books.length)openAt(i);}
-    document.getElementById("close").onclick=closeView;
-    document.getElementById("prev").onclick=()=>step(-1);
-    document.getElementById("next").onclick=()=>step(1);
-    (function(){const bar=document.getElementById("vbar");let x0=0,y0=0,on=false;
-      bar.addEventListener("pointerdown",(e)=>{on=true;x0=e.clientX;y0=e.clientY;});
-      bar.addEventListener("pointerup",(e)=>{if(!on)return;on=false;const dx=e.clientX-x0,dy=e.clientY-y0;
-        if(Math.abs(dy)>Math.abs(dx)&&dy>50)closeView();else if(dx<-50)step(1);else if(dx>50)step(-1);});})();
-    fetch("./catalog.json").then((r)=>r.ok?r.json():Promise.reject()).then((d)=>{state.books=d.books||[];render();})
-      .catch(()=>{state.books=[
-        {name:"数学一年级上册",path:"小学/数学/人教版/义务教育教科书 · 数学一年级上册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:50154321,split:false},
-        {name:"数学六年级下册",path:"小学/数学/人教版/义务教育教科书·数学六年级下册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:13134464,split:false},
-        {name:"语文一年级上册",path:"小学/语文/统编版/语文一年级上册.pdf",stage:"小学",subject:"语文",edition:"统编版",size:42000000,split:false},
-        {name:"英语三年级上册",path:"小学/英语/人教版/英语三年级上册.pdf",stage:"小学",subject:"英语",edition:"人教版",size:28000000,split:false}
-      ];render();});
-  </script>
-</body>
-</html>
+<header>
+<div class="bar"><div class="brand">云课本<small id="sub"></small></div>
+<input class="search" id="q" type="search" placeholder="搜索科目、人教版、年级…" enterkeyhint="search" /></div>
+<div class="chips" id="stages"></div>
+<div class="chips" id="grades"></div>
+<div class="chips" id="subjects"></div>
+</header>
+<main>
+<section class="hero"><div class="bg" id="heroBg"></div><div class="veil"></div>
+<div class="copy"><div class="sub" id="heroSub"></div><h1 id="heroTitle">选一本书</h1>
+<div class="row"><button class="btn-primary" id="readBtn" type="button">阅读</button><span id="heroMeta"></span></div></div></section>
+<section class="rail-wrap"><div class="rail-label" id="hint">左右滑动选封面</div><div class="rail" id="rail"></div></section>
+</main>
+<div id="viewer"><div class="vbar" id="vbar">
+<button class="btn-ghost" id="prev" type="button">上本</button>
+<button class="btn-ghost" id="close" type="button">关闭</button>
+<span id="vtitle"></span>
+<button class="btn-ghost" id="next" type="button">下本</button></div>
+<iframe id="frame" title="课本阅读"></iframe></div>
+<script src="./config.js"></script>
+<script>
+const cfg=window.KEBEN_CONFIG||{};
+const state={books:[],stage:"全部",grade:"全部",subject:"全部",q:"",idx:0,view:-1};
+const GRADE_ORDER=["一年级","二年级","三年级","四年级","五年级","六年级","七年级","八年级","九年级","高一","高二","高三"];
+const tones=["#6b3a22","#2f4a3c","#3a3f63","#5a3d2b","#1f4a5a","#4a2f3e"];
+document.title=cfg.title||"云课本";document.getElementById("sub").textContent=cfg.subtitle||"";
+function encodePath(p){return String(p||"").split("/").map(encodeURIComponent).join("/");}
+function fileUrl(book){const {owner,repo,branch}=cfg.github||{};
+if(cfg.storage==="cos"&&cfg.cosBase)return cfg.cosBase.replace(/\/$/,"")+"/"+encodePath(book.path);
+const raw=book.split&&book.parts&&book.parts[0]?book.parts[0]:book.path;
+if(cfg.storage==="jsdelivr")return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${encodePath(raw)}`;
+return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodePath(raw)}`;}
+function fmtSize(n){if(!n)return"";return n>1e6?(n/1e6).toFixed(1)+" MB":Math.ceil(n/1024)+" KB";}
+function shortName(name){return String(name||"").replace(/^义务教育教科书[·\s]*/,"").replace(/\.pdf$/i,"");}
+function tone(b){const s=(b.subject||b.name||"");let n=0;for(let i=0;i<s.length;i++)n+=s.charCodeAt(i);return tones[n%tones.length];}
+function paint(el,b){el.style.background="linear-gradient(160deg,"+tone(b)+",#1c1915)";}
+function gradeOf(b){const text=[b.grade,b.name,b.path].filter(Boolean).join(" ");return GRADE_ORDER.find(g=>text.includes(g))||"其他";}
+function sortGrades(list){return list.sort((a,b)=>{const ia=GRADE_ORDER.indexOf(a),ib=GRADE_ORDER.indexOf(b);
+if(a==="全部")return -1;if(b==="全部")return 1;if(ia<0&&ib<0)return a.localeCompare(b,"zh");if(ia<0)return 1;if(ib<0)return -1;return ia-ib;});}
+function filtered(){return state.books.filter(b=>{
+if(state.stage!=="全部"&&b.stage!==state.stage)return false;
+if(state.grade!=="全部"&&gradeOf(b)!==state.grade)return false;
+if(state.subject!=="全部"&&b.subject!==state.subject)return false;
+if(!state.q)return true;
+return [b.name,b.stage,b.subject,b.edition,gradeOf(b)].join(" ").toLowerCase().includes(state.q.toLowerCase());});}
+function canRead(b){return !!(b&&!(b.split&&cfg.storage!=="cos"));}
+function chips(el,items,current,onpick){el.innerHTML="";items.forEach(name=>{const b=document.createElement("button");b.type="button";b.className="chip"+(name===current?" on":"");b.textContent=name;b.onclick=()=>onpick(name);el.appendChild(b);});}
+function setHero(b){if(!b){document.getElementById("heroTitle").textContent="没有匹配的课本";document.getElementById("heroSub").textContent="";document.getElementById("heroMeta").textContent="";document.getElementById("readBtn").disabled=true;return;}
+paint(document.getElementById("heroBg"),b);
+document.getElementById("heroSub").textContent=[b.stage,gradeOf(b)==="其他"?"":gradeOf(b),b.subject,b.edition].filter(Boolean).join(" · ");
+document.getElementById("heroTitle").textContent=shortName(b.name);
+document.getElementById("heroMeta").textContent=fmtSize(b.size);
+document.getElementById("readBtn").disabled=!canRead(b);}
+function render(){const books=filtered();
+chips(document.getElementById("stages"),["全部",...new Set(state.books.map(b=>b.stage).filter(Boolean))],state.stage,v=>{state.stage=v;state.grade="全部";state.subject="全部";state.idx=0;render();});
+const pool=state.stage==="全部"?state.books:state.books.filter(b=>b.stage===state.stage);
+chips(document.getElementById("grades"),sortGrades(["全部",...new Set(pool.map(gradeOf))]),state.grade,v=>{state.grade=v;state.idx=0;render();});
+const pool2=pool.filter(b=>state.grade==="全部"||gradeOf(b)===state.grade);
+chips(document.getElementById("subjects"),["全部",...new Set(pool2.map(b=>b.subject).filter(Boolean))],state.subject,v=>{state.subject=v;state.idx=0;render();});
+const rail=document.getElementById("rail");rail.innerHTML="";
+books.forEach((b,i)=>{const el=document.createElement("button");el.type="button";el.className="poster"+(i===state.idx?" on":"");paint(el,b);
+el.innerHTML='<span class="spine"></span><span class="t"><span>'+(b.subject||"")+'</span><strong>'+shortName(b.name)+'</strong></span>';
+el.onclick=()=>{if(state.idx===i&&canRead(b))openAt(i);else{state.idx=i;sync(true);}};rail.appendChild(el);});
+if(!books.length)rail.innerHTML='<div class="empty">没有课本</div>';sync(false);}
+function sync(smooth){const books=filtered();const b=books[state.idx];setHero(b);
+[...document.getElementById("rail").children].forEach((el,i)=>el.classList.toggle("on",i===state.idx));
+document.getElementById("hint").innerHTML=b?("左右滑封面　<b>"+(state.idx+1)+"</b> / "+books.length):"没有匹配";
+const el=document.getElementById("rail").children[state.idx];if(el)el.scrollIntoView({inline:"center",block:"nearest",behavior:smooth?"smooth":"instant"});}
+function nearest(){const rail=document.getElementById("rail");const mid=rail.scrollLeft+rail.clientWidth/2;let best=0,dist=Infinity;
+[...rail.children].forEach((el,i)=>{const c=el.offsetLeft+el.offsetWidth/2;const d=Math.abs(c-mid);if(d<dist){dist=d;best=i;}});return best;}
+let tick=0;document.getElementById("rail").addEventListener("scroll",()=>{clearTimeout(tick);tick=setTimeout(()=>{state.idx=nearest();sync(false);},50);},{passive:true});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim();state.idx=0;render();});
+document.getElementById("readBtn").onclick=()=>openAt(state.idx);
+document.addEventListener("keydown",e=>{
+if(document.getElementById("viewer").classList.contains("show")){if(e.key==="ArrowLeft")step(-1);if(e.key==="ArrowRight")step(1);if(e.key==="Escape")closeView();return;}
+if(e.key==="ArrowLeft"){state.idx=Math.max(0,state.idx-1);sync(true);}if(e.key==="ArrowRight"){state.idx=Math.min(filtered().length-1,state.idx+1);sync(true);}if(e.key==="Enter")openAt(state.idx);});
+function openAt(i){const books=filtered();const b=books[i];if(!canRead(b))return;state.view=i;state.idx=i;
+document.getElementById("vtitle").textContent=shortName(b.name);
+document.getElementById("frame").src="https://mozilla.github.io/pdf.js/web/viewer.html?file="+encodeURIComponent(fileUrl(b));
+document.getElementById("viewer").classList.add("show");sync(true);}
+function closeView(){document.getElementById("viewer").classList.remove("show");document.getElementById("frame").src="about:blank";state.view=-1;}
+function step(d){const books=filtered();let i=state.view+d;while(i>=0&&i<books.length&&!canRead(books[i]))i+=d;if(i>=0&&i<books.length)openAt(i);}
+document.getElementById("close").onclick=closeView;document.getElementById("prev").onclick=()=>step(-1);document.getElementById("next").onclick=()=>step(1);
+(function(){const bar=document.getElementById("vbar");let x0=0,y0=0,on=false;
+bar.addEventListener("pointerdown",e=>{on=true;x0=e.clientX;y0=e.clientY;});
+bar.addEventListener("pointerup",e=>{if(!on)return;on=false;const dx=e.clientX-x0,dy=e.clientY-y0;if(Math.abs(dy)>Math.abs(dx)&&dy>50)closeView();else if(dx<-50)step(1);else if(dx>50)step(-1);});})();
+fetch("./catalog.json").then(r=>r.ok?r.json():Promise.reject()).then(d=>{state.books=d.books||[];render();})
+.catch(()=>{state.books=[
+{name:"数学一年级上册",path:"小学/数学/人教版/数学一年级上册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:50154321,split:false},
+{name:"数学二年级上册",path:"小学/数学/人教版/数学二年级上册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:30000000,split:false},
+{name:"数学六年级下册",path:"小学/数学/人教版/数学六年级下册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:13134464,split:false},
+{name:"语文一年级上册",path:"小学/语文/统编版/语文一年级上册.pdf",stage:"小学",subject:"语文",edition:"统编版",size:42000000,split:false},
+{name:"英语三年级上册",path:"小学/英语/人教版/英语三年级上册.pdf",stage:"小学",subject:"英语",edition:"人教版",size:28000000,split:false}
+];render();});
+</script>
+</body></html>
