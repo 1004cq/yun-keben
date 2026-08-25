@@ -11,11 +11,12 @@
       --bg: #f4f1ea; --paper: #fffdf8; --ink: #1c1915; --muted: #6b6458;
       --line: #e6dfd2; --accent: #c45c26; --accent-soft: #f3e0d2; --ok: #2f6b4f;
       --space-1: 8px; --space-2: 12px; --space-3: 16px; --space-4: 24px;
-      --radius-card: 16px; --radius-pill: 999px;
+      --radius-card: 18px; --radius-pill: 999px;
       --font: "Noto Sans SC", system-ui, sans-serif; --motion: 180ms ease;
     }
     * { box-sizing: border-box; }
-    html, body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font); }
+    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font); }
+    body { min-height: 100dvh; display: flex; flex-direction: column; }
     a { color: inherit; }
     button, .btn {
       appearance: none; border: 0; font: inherit; cursor: pointer;
@@ -30,56 +31,84 @@
     .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
     header {
       position: sticky; top: 0; z-index: 20;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      background: color-mix(in srgb, var(--bg) 90%, transparent);
       backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
     }
     .bar {
       max-width: 1080px; margin: 0 auto;
-      padding: 10px 16px calc(10px + env(safe-area-inset-top));
-      display: grid; grid-template-columns: auto 1fr; gap: var(--space-2); align-items: center;
+      padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+      display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
     }
-    .brand { font-weight: 700; letter-spacing: .06em; line-height: 1.2; }
+    .brand { font-weight: 700; letter-spacing: .06em; }
     .brand small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+    .tools { display: flex; gap: 8px; align-items: center; }
+    .mode {
+      min-height: 36px; padding: 0 10px; border-radius: var(--radius-pill);
+      background: var(--paper); border: 1px solid var(--line); font-size: 13px;
+    }
     .search {
-      width: 100%; min-height: 44px; border: 1px solid var(--line); background: var(--paper);
+      grid-column: 1 / -1; width: 100%; min-height: 44px;
+      border: 1px solid var(--line); background: var(--paper);
       border-radius: var(--radius-pill); padding: 0 16px; font: inherit;
     }
-    main { max-width: 1080px; margin: 0 auto; padding: 20px 16px calc(80px + env(safe-area-inset-bottom)); }
-    .intro h1 { margin: 0 0 6px; font-size: clamp(22px, 5vw, 32px); }
-    .intro p { margin: 0 0 var(--space-4); color: var(--muted); max-width: 46ch; }
-    .status { margin: 0 0 var(--space-3); font-size: 13px; color: var(--muted); }
-    .chips { display: flex; gap: var(--space-1); overflow-x: auto; flex-wrap: nowrap; margin: 0 0 var(--space-2); -webkit-overflow-scrolling: touch; }
+    main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .filters { max-width: 1080px; width: 100%; margin: 0 auto; padding: 12px 16px 0; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; flex-wrap: nowrap; margin: 0 0 8px; -webkit-overflow-scrolling: touch; }
     .chips::-webkit-scrollbar { display: none; }
     .chip {
       flex: 0 0 auto; min-height: 36px; padding: 0 12px; border: 1px solid var(--line);
-      background: var(--paper); border-radius: var(--radius-pill); font-size: 13px; cursor: pointer;
+      background: var(--paper); border-radius: var(--radius-pill); font-size: 13px;
     }
     .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-    .grid { display: grid; grid-template-columns: 1fr; gap: var(--space-2); }
-    @media (min-width: 640px) {
-      .bar { grid-template-columns: auto minmax(200px, 360px) 1fr; }
-      .grid { grid-template-columns: repeat(2, 1fr); }
+    .status { margin: 0 16px 8px; font-size: 13px; color: var(--muted); }
+    .deck-wrap { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    .deck {
+      flex: 1; display: flex; align-items: center;
+      overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; gap: 16px;
+      padding: 8px calc(50vw - min(148px, 38vw)) 16px;
     }
+    .deck::-webkit-scrollbar { display: none; }
+    .cover {
+      scroll-snap-align: center; flex: 0 0 min(296px, 76vw);
+      aspect-ratio: 3 / 4.2; border: 0; padding: 0; border-radius: 6px 14px 14px 6px;
+      position: relative; overflow: hidden; color: #f8f1e6; text-align: left;
+      box-shadow: 8px 16px 32px rgba(40, 28, 16, .18);
+      transform: scale(.92); opacity: .72; transition: transform var(--motion), opacity var(--motion);
+    }
+    .cover.on { transform: scale(1); opacity: 1; }
+    .cover .spine {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 14px;
+      background: linear-gradient(90deg, rgba(0,0,0,.28), transparent);
+    }
+    .cover .inner { height: 100%; padding: 22px 18px 18px 26px; display: flex; flex-direction: column; }
+    .cover .sub { font-size: 12px; opacity: .8; }
+    .cover h2 { margin: 10px 0 0; font-size: clamp(18px, 5vw, 24px); font-weight: 700; line-height: 1.3; }
+    .cover .foot { margin-top: auto; font-size: 12px; opacity: .8; }
+    .hint { text-align: center; color: var(--muted); font-size: 13px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+    .hint b { color: var(--ink); font-weight: 500; }
+    .grid-wrap { display: none; padding: 0 16px 80px; max-width: 1080px; margin: 0 auto; width: 100%; }
+    body.list .deck-wrap { display: none; }
+    body.list .grid-wrap { display: block; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
     .card {
       background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-card);
-      padding: var(--space-3); display: flex; flex-direction: column; gap: 8px; min-height: 132px;
+      padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 124px; text-align: left;
     }
-    .tag { font-size: 12px; color: var(--ok); font-weight: 500; }
-    .card h3 { margin: 0; font-size: 16px; font-weight: 500; line-height: 1.4; }
+    .tag { font-size: 12px; color: var(--ok); }
+    .card h3 { margin: 0; font-size: 16px; font-weight: 500; }
     .meta { margin-top: auto; font-size: 12px; color: var(--muted); }
-    .actions { display: flex; gap: var(--space-1); }
     .empty { text-align: center; color: var(--muted); padding: 48px 8px; }
-    .more { width: 100%; margin-top: var(--space-3); background: transparent; border: 1px solid var(--line); color: var(--ink); }
-    footer { max-width: 1080px; margin: 0 auto; padding: 0 16px 32px; font-size: 12px; color: var(--muted); line-height: 1.7; }
-    footer a { color: var(--accent); }
-    @media (prefers-reduced-motion: no-preference) { .card { animation: rise var(--motion) both; } }
-    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     #viewer { display: none; position: fixed; inset: 0; z-index: 50; background: #161411; flex-direction: column; }
     #viewer.show { display: flex; }
-    .vbar { display: flex; align-items: center; gap: 8px; padding: 8px 10px calc(8px + env(safe-area-inset-top)); color: #f4f1ea; }
+    .vbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: calc(8px + env(safe-area-inset-top)) 10px 8px; color: #f4f1ea; touch-action: none;
+    }
     .vbar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
-    .vbar .btn-ghost { background: #2a2622; color: #f4f1ea; }
+    .vbar .btn-ghost { background: #2a2622; color: #f4f1ea; min-width: 44px; }
     iframe { border: 0; flex: 1; width: 100%; background: #2a2622; }
   </style>
 </head>
@@ -87,42 +116,38 @@
   <header>
     <div class="bar">
       <div class="brand">云课本<small id="sub"></small></div>
+      <div class="tools"><button class="mode" id="mode" type="button">列表</button></div>
       <input class="search" id="q" type="search" placeholder="搜索科目、人教版、年级…" enterkeyhint="search" />
     </div>
   </header>
   <main>
-    <section class="intro">
-      <h1>选一本书开始读</h1>
-      <p>按学段和科目找教材。完整 PDF 请走 COS；GitHub 源仅调试。</p>
-    </section>
+    <div class="filters">
+      <div class="chips" id="stages"></div>
+      <div class="chips" id="subjects"></div>
+    </div>
     <p class="status" id="status">正在读取目录…</p>
-    <div class="chips" id="stages"></div>
-    <div class="chips" id="subjects"></div>
-    <div class="grid" id="list"></div>
-    <button class="more" id="more" hidden>加载更多</button>
+    <section class="deck-wrap">
+      <div class="deck" id="deck"></div>
+      <p class="hint" id="hint">左右滑动选书 · 点封面阅读</p>
+    </section>
+    <section class="grid-wrap"><div class="grid" id="list"></div></section>
   </main>
-  <footer>
-    教材版权归出版社。仅供个人学习。
-    <a id="official" href="https://basic.smartedu.cn/tchMaterial" target="_blank" rel="noopener">智慧教育平台</a>
-    · <a id="src" href="https://github.com/TapXWorld/ChinaTextbook" target="_blank" rel="noopener">源仓</a>
-  </footer>
   <div id="viewer">
-    <div class="vbar">
+    <div class="vbar" id="vbar">
+      <button class="btn-ghost" id="prev" type="button">上本</button>
       <button class="btn-ghost" id="close" type="button">关闭</button>
       <span id="vtitle"></span>
-      <a class="btn-ghost" id="dl" target="_blank" rel="noopener">下载</a>
+      <button class="btn-ghost" id="next" type="button">下本</button>
     </div>
     <iframe id="frame" title="课本阅读"></iframe>
   </div>
   <script src="./config.js"></script>
   <script>
     const cfg = window.KEBEN_CONFIG || {};
-    const PAGE = 24;
-    const state = { books: [], stage: "全部", subject: "全部", q: "", shown: PAGE };
+    const state = { books: [], stage: "全部", subject: "全部", q: "", idx: 0, view: -1 };
+    const tones = ["#6b3a22", "#2f4a3c", "#3a3f63", "#5a3d2b", "#1f4a5a", "#4a2f3e"];
     document.title = cfg.title || "云课本";
     document.getElementById("sub").textContent = cfg.subtitle || "";
-    document.getElementById("official").href = cfg.official || "#";
-    document.getElementById("src").href = cfg.sourceRepo || "#";
     function encodePath(p) { return String(p || "").split("/").map(encodeURIComponent).join("/"); }
     function fileUrl(book) {
       const { owner, repo, branch } = cfg.github || {};
@@ -131,85 +156,140 @@
       if (cfg.storage === "jsdelivr") return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${encodePath(raw)}`;
       return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodePath(raw)}`;
     }
-    function ghPage(book) {
-      const { owner, repo, branch } = cfg.github || {};
-      return `https://github.com/${owner}/${repo}/blob/${branch}/${encodePath(book.path)}`;
-    }
     function fmtSize(n) {
       if (!n) return "";
-      if (n > 1e9) return (n / 1e9).toFixed(1) + " GB";
       if (n > 1e6) return (n / 1e6).toFixed(1) + " MB";
       return Math.ceil(n / 1024) + " KB";
     }
     function shortName(name) {
       return String(name || "").replace(/^义务教育教科书[·\s]*/, "").replace(/\.pdf$/i, "");
     }
+    function tone(b) {
+      const s = (b.subject || b.name || "") + "";
+      let n = 0; for (let i = 0; i < s.length; i++) n += s.charCodeAt(i);
+      return tones[n % tones.length];
+    }
     function filtered() {
       return state.books.filter((b) => {
         if (state.stage !== "全部" && b.stage !== state.stage) return false;
         if (state.subject !== "全部" && b.subject !== state.subject) return false;
         if (!state.q) return true;
-        return [b.name, b.stage, b.subject, b.edition, shortName(b.name)].join(" ").toLowerCase().includes(state.q.toLowerCase());
+        return [b.name, b.stage, b.subject, b.edition].join(" ").toLowerCase().includes(state.q.toLowerCase());
       });
     }
     function chips(el, items, current, onpick) {
       el.innerHTML = "";
       items.forEach((name) => {
         const b = document.createElement("button");
-        b.type = "button";
-        b.className = "chip" + (name === current ? " on" : "");
-        b.textContent = name;
-        b.onclick = () => onpick(name);
-        el.appendChild(b);
+        b.type = "button"; b.className = "chip" + (name === current ? " on" : "");
+        b.textContent = name; b.onclick = () => onpick(name); el.appendChild(b);
       });
     }
+    function canRead(b) { return !(b.split && cfg.storage !== "cos"); }
     function render() {
       const books = filtered();
       chips(document.getElementById("stages"), ["全部", ...[...new Set(state.books.map((b) => b.stage).filter(Boolean))]], state.stage, (v) => {
-        state.stage = v; state.subject = "全部"; state.shown = PAGE; render();
+        state.stage = v; state.subject = "全部"; state.idx = 0; render();
       });
       const pool = state.stage === "全部" ? state.books : state.books.filter((b) => b.stage === state.stage);
       chips(document.getElementById("subjects"), ["全部", ...[...new Set(pool.map((b) => b.subject).filter(Boolean))]], state.subject, (v) => {
-        state.subject = v; state.shown = PAGE; render();
+        state.subject = v; state.idx = 0; render();
       });
-      document.getElementById("status").textContent = books.length + " 本" + (cfg.storage ? " · " + cfg.storage : "");
-      const list = document.getElementById("list");
-      list.innerHTML = "";
-      const slice = books.slice(0, state.shown);
-      if (!slice.length) list.innerHTML = '<div class="empty">没有匹配的课本</div>';
-      slice.forEach((b) => {
-        const canRead = !(b.split && cfg.storage !== "cos");
-        const el = document.createElement("article");
-        el.className = "card";
-        el.innerHTML = `<div class="tag">${[b.stage, b.subject, b.edition].filter(Boolean).join(" · ")}</div>
-          <h3>${shortName(b.name)}</h3>
-          <div class="meta">${fmtSize(b.size)}${b.split ? " · 待合并分片" : ""}</div>
-          <div class="actions">
-            <button class="btn-primary" data-open ${canRead ? "" : "disabled"}>${canRead ? "阅读" : "未合并"}</button>
-            <a class="btn-ghost" href="${ghPage(b)}" target="_blank" rel="noopener">源文件</a>
-          </div>`;
-        const open = el.querySelector("[data-open]");
-        if (canRead) open.onclick = () => openBook(b);
-        list.appendChild(el);
+      document.getElementById("status").textContent = books.length + " 本 · 左右滑";
+      const deck = document.getElementById("deck"); deck.innerHTML = "";
+      if (!books.length) { deck.innerHTML = '<div class="empty">没有匹配的课本</div>'; document.getElementById("hint").textContent = ""; }
+      books.forEach((b, i) => {
+        const el = document.createElement("button");
+        el.type = "button"; el.className = "cover" + (i === state.idx ? " on" : "");
+        el.style.background = "linear-gradient(160deg," + tone(b) + ",#1c1915)";
+        el.innerHTML = '<span class="spine"></span><span class="inner"><span class="sub">' +
+          [b.stage, b.subject, b.edition].filter(Boolean).join(" · ") +
+          '</span><h2>' + shortName(b.name) + '</h2><span class="foot">' +
+          fmtSize(b.size) + (canRead(b) ? " · 点按阅读" : " · 待合并") + '</span></span>';
+        el.onclick = () => { state.idx = i; markDeck(); if (canRead(b)) openAt(i); };
+        deck.appendChild(el);
       });
-      document.getElementById("more").hidden = books.length <= state.shown;
+      document.getElementById("list").innerHTML = books.map((b, i) =>
+        '<article class="card"><div class="tag">' + [b.stage, b.subject, b.edition].filter(Boolean).join(" · ") +
+        '</div><h3>' + shortName(b.name) + '</h3><div class="meta">' + fmtSize(b.size) +
+        '</div><div><button class="btn-primary" ' + (canRead(b) ? '' : 'disabled') + ' data-i="' + i + '">' +
+        (canRead(b) ? '阅读' : '未合并') + '</button></div></article>'
+      ).join('') || '<div class="empty">没有匹配的课本</div>';
+      document.getElementById("list").querySelectorAll("[data-i]").forEach((btn) => { btn.onclick = () => openAt(+btn.dataset.i); });
+      requestAnimationFrame(() => snapTo(state.idx, false)); updateHint();
     }
-    function openBook(b) {
+    function markDeck() {
+      [...document.getElementById("deck").children].forEach((el, i) => el.classList.toggle("on", i === state.idx));
+      updateHint();
+    }
+    function updateHint() {
+      const books = filtered(); const b = books[state.idx];
+      document.getElementById("hint").innerHTML = b ? ('<b>' + (state.idx + 1) + '</b> / ' + books.length + '　' + shortName(b.name)) : '';
+    }
+    function snapTo(i, smooth) {
+      const el = document.getElementById("deck").children[i];
+      if (el) el.scrollIntoView({ inline: "center", block: "nearest", behavior: smooth === false ? "instant" : "smooth" });
+    }
+    function nearest() {
+      const deck = document.getElementById("deck");
+      const mid = deck.scrollLeft + deck.clientWidth / 2;
+      let best = 0, dist = Infinity;
+      [...deck.children].forEach((el, i) => {
+        const c = el.offsetLeft + el.offsetWidth / 2; const d = Math.abs(c - mid);
+        if (d < dist) { dist = d; best = i; }
+      });
+      return best;
+    }
+    const deckEl = document.getElementById("deck");
+    let scrollTick = 0;
+    deckEl.addEventListener("scroll", () => {
+      window.clearTimeout(scrollTick);
+      scrollTick = window.setTimeout(() => { state.idx = nearest(); markDeck(); }, 60);
+    }, { passive: true });
+    document.getElementById("mode").onclick = () => {
+      const list = document.body.classList.toggle("list");
+      document.getElementById("mode").textContent = list ? "滑动" : "列表";
+    };
+    document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value.trim(); state.idx = 0; render(); });
+    function openAt(i) {
+      const books = filtered(); const b = books[i];
+      if (!b || !canRead(b)) return;
+      state.view = i; state.idx = i;
       const url = fileUrl(b);
       document.getElementById("vtitle").textContent = shortName(b.name);
-      document.getElementById("dl").href = url;
       document.getElementById("frame").src = "https://mozilla.github.io/pdf.js/web/viewer.html?file=" + encodeURIComponent(url);
-      document.getElementById("viewer").classList.add("show");
+      document.getElementById("viewer").classList.add("show"); markDeck();
     }
-    document.getElementById("close").onclick = () => {
+    function closeView() {
       document.getElementById("viewer").classList.remove("show");
-      document.getElementById("frame").src = "about:blank";
-    };
-    document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value.trim(); state.shown = PAGE; render(); });
-    document.getElementById("more").onclick = () => { state.shown += PAGE; render(); };
+      document.getElementById("frame").src = "about:blank"; state.view = -1;
+    }
+    function step(d) {
+      const books = filtered(); let i = state.view + d;
+      while (i >= 0 && i < books.length && !canRead(books[i])) i += d;
+      if (i < 0 || i >= books.length) return; openAt(i);
+    }
+    document.getElementById("close").onclick = closeView;
+    document.getElementById("prev").onclick = () => step(-1);
+    document.getElementById("next").onclick = () => step(1);
+    (function swipeBar() {
+      const bar = document.getElementById("vbar");
+      let x0 = 0, y0 = 0, on = false;
+      bar.addEventListener("pointerdown", (e) => { on = true; x0 = e.clientX; y0 = e.clientY; bar.setPointerCapture(e.pointerId); });
+      bar.addEventListener("pointerup", (e) => {
+        if (!on) return; on = false;
+        const dx = e.clientX - x0, dy = e.clientY - y0;
+        if (Math.abs(dx) < 40 && Math.abs(dy) < 40) return;
+        if (Math.abs(dy) > Math.abs(dx) && dy > 50) closeView();
+        else if (dx < -50) step(1);
+        else if (dx > 50) step(-1);
+      });
+    })();
     fetch("./catalog.json").then((r) => r.ok ? r.json() : Promise.reject()).then((d) => { state.books = d.books || []; render(); })
       .catch(() => { state.books = [
-        { name: "数学一年级上册", path: "小学/数学/人教版/义务教育教科书 · 数学一年级上册.pdf", stage: "小学", subject: "数学", edition: "人教版", size: 50154321, split: false }
+        { name: "数学一年级上册", path: "小学/数学/人教版/义务教育教科书 · 数学一年级上册.pdf", stage: "小学", subject: "数学", edition: "人教版", size: 50154321, split: false },
+        { name: "数学六年级下册", path: "小学/数学/人教版/义务教育教科书·数学六年级下册.pdf", stage: "小学", subject: "数学", edition: "人教版", size: 13134464, split: false },
+        { name: "语文一年级上册", path: "小学/语文/统编版/语文一年级上册.pdf", stage: "小学", subject: "语文", edition: "统编版", size: 42000000, split: false }
       ]; render(); });
   </script>
 </body>
