@@ -1,10 +1,8 @@
 # 文档索引
 
-从 [根 README](../README.md) 看全貌。
-
 | 文件 | 用途 |
 |---|---|
-| [SKILLS.md](SKILLS.md) | 四条 skill 流水线 |
-| [STACK.md](STACK.md) | JS / Vue 怎么选 |
+| [SKILLS.md](SKILLS.md) | frontend-design + impeccable + 动效规则 + Karpathy |
+| [STACK.md](STACK.md) | JS → 可选 Vue 3 + Vite |
 | [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md) | Pages / COS |
-| [PROMPTS.md](PROMPTS.md) | Cursor 提示词 |
+| [PROMPTS.md](PROMPTS.md) | 功能提示词 A–F |
