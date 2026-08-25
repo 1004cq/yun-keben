@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>云课本</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f4f1ea; color: #1c1915; }
+    main { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+    .muted { color: #6b6458; line-height: 1.6; }
+    #status { background: #fffdf8; border: 1px solid #e6dfd2; border-radius: 12px; padding: 14px 16px; }
+    a { color: #c45c26; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="title">云课本</h1>
+    <p class="muted" id="sub">GitHub Actions 部署占位页。</p>
+    <p id="status">正在读取 config.js / catalog.json …</p>
+    <p class="muted">教材版权归出版社，仅供个人学习。
+      <a href="https://basic.smartedu.cn/tchMaterial">智慧教育平台</a> ·
+      <a href="https://github.com/1004cq/yun-keben">yun-keben</a></p>
+  </main>
+  <script src="./config.js"></script>
+  <script>
+    const cfg = window.KEBEN_CONFIG || {};
+    if (cfg.title) document.getElementById("title").textContent = cfg.title;
+    if (cfg.subtitle) document.getElementById("sub").textContent = cfg.subtitle;
+    fetch("./catalog.json")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("还没有 catalog.json"))))
+      .then((d) => {
+        document.getElementById("status").textContent = "目录已加载，共 " + (d.count || (d.books || []).length) + " 本。";
+      })
+      .catch((e) => {
+        document.getElementById("status").textContent = e.message;
+      });
+  </script>
+</body>
+</html>
