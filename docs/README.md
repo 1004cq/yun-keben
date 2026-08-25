@@ -1,11 +1,10 @@
 # 文档索引
 
-从 [根 README](../README.md) 看项目全貌。这里是分册。
+从 [根 README](../README.md) 看全貌。
 
-| 文件 | 适合谁 |
+| 文件 | 用途 |
 |---|---|
-| [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md) | 要看懂 YAML、跑通 Pages / COS |
-| [PROMPTS.md](PROMPTS.md) | 用 Cursor 按阶段写代码 |
-| [STACK.md](STACK.md) | 前端语言和框架怎么选 |
-
-写文档时保持：短句、表格优先、命令可复制、不把密钥写进来。
+| [SKILLS.md](SKILLS.md) | 四条 skill 流水线 |
+| [STACK.md](STACK.md) | JS / Vue 怎么选 |
+| [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md) | Pages / COS |
+| [PROMPTS.md](PROMPTS.md) | Cursor 提示词 |
