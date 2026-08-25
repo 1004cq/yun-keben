@@ -2,32 +2,16 @@
 
 给 Codex / Cursor 的项目说明书。打开本仓库后先读这些文件再改代码。
 
+## 自动启用 skill
+
+本仓库已带 skill，不要问用户是否安装，也不要下载 React Bits / Aceternity。
+
+1. 直接使用 `.agents/skills/yun-keben-ui/SKILL.md`（Codex 会扫描 `.agents/skills`）。
+2. 若技能列表没有 `yun-keben-ui`，仍按该文件执行。
+3. 只有用户点名外部 skill 时才运行 `$skill-installer`。
+4. marketplace：`.agents/plugins/marketplace.json`。挂插件：`codex plugin marketplace add .` 再 `codex plugin add yun-keben@yun-keben-marketplace`。
+
 ## 仓库
 
 - GitHub：https://github.com/1004cq/yun-keben
-- 产品：云课本（静态站）。目录在 `web/`，文档在 `docs/`。
-- 第一期：零构建。可改 `web/index.html`、`web/config.js`、`web/catalog.json`。不要为动效引入 React / Vue / Aceternity / React Bits。
-
-## 必读文档（按这个顺序）
-
-1. `README.md` — 目标与部署
-2. `docs/SKILLS.md` — 设计系统、组件谱、动效预算
-3. `docs/STACK.md` — 语言与框架决策
-4. `docs/PROMPTS.md`、`docs/PROMPTS_SWIPE.md` — 分阶段提示词
-5. `docs/GITHUB_ACTIONS.md` — Pages / COS 工作流
-
-需求已写在上述 md 里。用户只说「按仓库做」时，按这些文件实现，不要另起视觉。
-
-## 设计锁
-
-- 纸色 token：`--bg #f4f1ea`、`--paper #fffdf8`、`--ink #1c1915`、`--accent #c45c26`
-- 字体：Noto Sans SC
-- 触控目标 ≥ 44px；尊重 `prefers-reduced-motion`
-- 选书：大封面 + 底部横滑海报条；年级在学段和科目之间
-- 进入阅读：CSS 3D 翻书后打开 PDF.js
-
-## 验证
-
-```bash
-python3 -m http.server -d web 8080
-```
+- 第一期零构建，只改 `web/` 与 `docs/`。

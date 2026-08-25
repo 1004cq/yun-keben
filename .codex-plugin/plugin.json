@@ -1,0 +1,6 @@
+{
+  "name": "yun-keben",
+  "version": "1.0.0",
+  "description": "云课本静态站 skill",
+  "skills": "./.agents/skills"
+}
