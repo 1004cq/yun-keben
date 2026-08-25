@@ -4,52 +4,57 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>云课本</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
 :root{--bg:#f4f1ea;--paper:#fffdf8;--ink:#1c1915;--muted:#6b6458;--line:#e6dfd2;--accent:#c45c26;--font:"Noto Sans SC",system-ui,sans-serif;--motion:180ms ease}
 *{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.5 var(--font)}
 body{min-height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 button{appearance:none;border:0;font:inherit;cursor:pointer;min-height:44px;padding:0 14px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center}
-button:focus-visible,input:focus-visible,.chip:focus-visible,.poster:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .btn-primary{background:#fff;color:var(--ink);font-weight:600}.btn-ghost{background:#2a2622;color:#f4f1ea}
-header{z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);border-bottom:1px solid var(--line)}
+header{z-index:20;border-bottom:1px solid var(--line)}
 .bar{padding:calc(8px + env(safe-area-inset-top)) 14px 8px;display:grid;grid-template-columns:1fr auto;gap:8px}
-.brand{font-weight:700;letter-spacing:.06em}.brand small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.brand{font-weight:700}.brand small{display:block;font-weight:400;color:var(--muted);font-size:12px}
 .search{grid-column:1/-1;min-height:40px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:0 14px;font:inherit}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:8px 14px 0}.chips::-webkit-scrollbar,.rail::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;min-height:32px;padding:0 12px;border:1px solid var(--line);background:var(--paper);border-radius:999px;font-size:13px}
 .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 main{flex:1;min-height:0;display:flex;flex-direction:column}
-.hero{flex:1;min-height:0;position:relative;margin:10px 14px 0;border-radius:18px;overflow:hidden;color:#f8f1e6;box-shadow:0 16px 40px rgba(40,28,16,.16)}
-.hero .bg{position:absolute;inset:0}.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(12,10,8,.82) 100%)}
-.hero .copy{position:absolute;left:18px;right:18px;bottom:16px}.hero .sub{font-size:12px;opacity:.8}.hero h1{margin:6px 0 8px;font-size:clamp(22px,6vw,34px);line-height:1.25}.hero .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.rail-wrap{padding:12px 0 calc(10px + env(safe-area-inset-bottom))}.rail-label{padding:0 16px 8px;font-size:13px;color:var(--muted)}.rail-label b{color:var(--ink);font-weight:600}
-.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:4px calc(50vw - 52px) 8px}
-.poster{scroll-snap-align:center;flex:0 0 104px;height:146px;padding:0;border:0;border-radius:4px 10px 10px 4px;color:#f8f1e6;text-align:left;position:relative;overflow:hidden;transform:scale(.9);opacity:.7;transition:transform var(--motion),opacity var(--motion),box-shadow var(--motion)}
+.hero{flex:1;min-height:0;position:relative;margin:10px 14px 0;border-radius:18px;overflow:hidden;color:#f8f1e6}
+.hero .bg{position:absolute;inset:0}.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(12,10,8,.82))}
+.hero .copy{position:absolute;left:18px;right:18px;bottom:16px}.hero h1{margin:6px 0 8px;font-size:clamp(22px,6vw,34px)}
+.hero.turn .bg{animation:cover-tilt .42s ease}
+@keyframes cover-tilt{40%{transform:perspective(900px) rotateY(-12deg)}}
+.rail-wrap{padding:12px 0 calc(10px + env(safe-area-inset-bottom))}
+.rail-label{padding:0 16px 8px;font-size:13px;color:var(--muted)}.rail-label b{color:var(--ink)}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px calc(50vw - 52px) 8px}
+.poster{scroll-snap-align:center;flex:0 0 104px;height:146px;padding:0;border:0;border-radius:4px 10px 10px 4px;color:#f8f1e6;text-align:left;position:relative;overflow:hidden;transform:scale(.9);opacity:.7;transition:transform var(--motion),opacity var(--motion)}
 .poster.on{transform:scale(1);opacity:1;box-shadow:0 0 0 2px var(--ink)}
 .poster .spine{position:absolute;inset:0 auto 0 0;width:8px;background:rgba(0,0,0,.28)}
-.poster .t{position:absolute;left:12px;right:8px;bottom:8px;top:10px;display:flex;flex-direction:column;font-size:11px}.poster .t strong{margin-top:auto;font-size:12px;line-height:1.3}
-@media (prefers-reduced-motion:reduce){.poster,.poster.on{transition:none;transform:none}}
+.poster .t{position:absolute;left:12px;right:8px;bottom:8px;top:10px;display:flex;flex-direction:column;font-size:11px}.poster .t strong{margin-top:auto;font-size:12px}
+#flip{display:none;position:fixed;inset:0;z-index:60;perspective:1400px;background:#1c1915;pointer-events:none}
+#flip.on{display:block}
+#flip .spread{position:absolute;inset:8% 10%;transform-style:preserve-3d}
+#flip .leaf{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;color:#f8f1e6}
+#flip .back{left:0;border-radius:8px 0 0 8px}
+#flip .front{right:0;border-radius:0 8px 8px 0;transform-origin:left center;transform:rotateY(0);transition:transform .48s cubic-bezier(.2,.7,.2,1);box-shadow:8px 10px 28px rgba(0,0,0,.35)}
+#flip.turn .front{transform:rotateY(-180deg)}
+#flip .label{position:absolute;left:18px;right:18px;bottom:20px;font-size:18px;font-weight:700}
+#flip .spine-line{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(0,0,0,.35);z-index:2}
 #viewer{display:none;position:fixed;inset:0;z-index:50;background:#161411;flex-direction:column}#viewer.show{display:flex}
 .vbar{display:flex;align-items:center;gap:8px;touch-action:none;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;color:#f4f1ea}
-.vbar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
-iframe{border:0;flex:1;width:100%;background:#2a2622}.empty{margin:auto;color:var(--muted)}
-</style>
-</head>
+.vbar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+iframe{border:0;flex:1;width:100%;background:#2a2622}
+@media (prefers-reduced-motion:reduce){.poster,.poster.on,.hero.turn .bg,#flip .front{transition:none;animation:none;transform:none}}
+</style></head>
 <body>
-<header>
-<div class="bar"><div class="brand">云课本<small id="sub"></small></div>
-<input class="search" id="q" type="search" placeholder="搜索科目、人教版、年级…" enterkeyhint="search" /></div>
-<div class="chips" id="stages"></div>
-<div class="chips" id="grades"></div>
-<div class="chips" id="subjects"></div>
-</header>
+<header><div class="bar"><div class="brand">云课本<small id="sub"></small></div>
+<input class="search" id="q" type="search" placeholder="搜索科目、年级…" /></div>
+<div class="chips" id="stages"></div><div class="chips" id="grades"></div><div class="chips" id="subjects"></div></header>
 <main>
-<section class="hero"><div class="bg" id="heroBg"></div><div class="veil"></div>
-<div class="copy"><div class="sub" id="heroSub"></div><h1 id="heroTitle">选一本书</h1>
+<section class="hero" id="hero"><div class="bg" id="heroBg"></div><div class="veil"></div>
+<div class="copy"><div id="heroSub"></div><h1 id="heroTitle">选一本书</h1>
 <div class="row"><button class="btn-primary" id="readBtn" type="button">阅读</button><span id="heroMeta"></span></div></div></section>
-<section class="rail-wrap"><div class="rail-label" id="hint">左右滑动选封面</div><div class="rail" id="rail"></div></section>
+<section class="rail-wrap"><div class="rail-label" id="hint">左右滑封面</div><div class="rail" id="rail"></div></section>
 </main>
 <div id="viewer"><div class="vbar" id="vbar">
 <button class="btn-ghost" id="prev" type="button">上本</button>
@@ -57,13 +62,18 @@ iframe{border:0;flex:1;width:100%;background:#2a2622}.empty{margin:auto;color:va
 <span id="vtitle"></span>
 <button class="btn-ghost" id="next" type="button">下本</button></div>
 <iframe id="frame" title="课本阅读"></iframe></div>
+<div id="flip"><div class="spread">
+<div class="leaf back" id="flipBack"><span class="label" id="flipBackLabel"></span></div>
+<div class="spine-line"></div>
+<div class="leaf front" id="flipFront"><span class="label" id="flipFrontLabel"></span></div>
+</div></div>
 <script src="./config.js"></script>
 <script>
 const cfg=window.KEBEN_CONFIG||{};
 const state={books:[],stage:"全部",grade:"全部",subject:"全部",q:"",idx:0,view:-1};
 const GRADE_ORDER=["一年级","二年级","三年级","四年级","五年级","六年级","七年级","八年级","九年级","高一","高二","高三"];
 const tones=["#6b3a22","#2f4a3c","#3a3f63","#5a3d2b","#1f4a5a","#4a2f3e"];
-document.title=cfg.title||"云课本";document.getElementById("sub").textContent=cfg.subtitle||"";
+document.getElementById("sub").textContent=cfg.subtitle||"";
 function encodePath(p){return String(p||"").split("/").map(encodeURIComponent).join("/");}
 function fileUrl(book){const {owner,repo,branch}=cfg.github||{};
 if(cfg.storage==="cos"&&cfg.cosBase)return cfg.cosBase.replace(/\/$/,"")+"/"+encodePath(book.path);
@@ -75,17 +85,15 @@ function shortName(name){return String(name||"").replace(/^义务教育教科书
 function tone(b){const s=(b.subject||b.name||"");let n=0;for(let i=0;i<s.length;i++)n+=s.charCodeAt(i);return tones[n%tones.length];}
 function paint(el,b){el.style.background="linear-gradient(160deg,"+tone(b)+",#1c1915)";}
 function gradeOf(b){const text=[b.grade,b.name,b.path].filter(Boolean).join(" ");return GRADE_ORDER.find(g=>text.includes(g))||"其他";}
-function sortGrades(list){return list.sort((a,b)=>{const ia=GRADE_ORDER.indexOf(a),ib=GRADE_ORDER.indexOf(b);
-if(a==="全部")return -1;if(b==="全部")return 1;if(ia<0&&ib<0)return a.localeCompare(b,"zh");if(ia<0)return 1;if(ib<0)return -1;return ia-ib;});}
+function sortGrades(list){return list.sort((a,b)=>{const ia=GRADE_ORDER.indexOf(a),ib=GRADE_ORDER.indexOf(b);if(a==="全部")return -1;if(b==="全部")return 1;if(ia<0&&ib<0)return a.localeCompare(b,"zh");if(ia<0)return 1;if(ib<0)return -1;return ia-ib;});}
 function filtered(){return state.books.filter(b=>{
 if(state.stage!=="全部"&&b.stage!==state.stage)return false;
 if(state.grade!=="全部"&&gradeOf(b)!==state.grade)return false;
 if(state.subject!=="全部"&&b.subject!==state.subject)return false;
-if(!state.q)return true;
-return [b.name,b.stage,b.subject,b.edition,gradeOf(b)].join(" ").toLowerCase().includes(state.q.toLowerCase());});}
+if(!state.q)return true;return [b.name,b.stage,b.subject,b.edition,gradeOf(b)].join(" ").toLowerCase().includes(state.q.toLowerCase());});}
 function canRead(b){return !!(b&&!(b.split&&cfg.storage!=="cos"));}
 function chips(el,items,current,onpick){el.innerHTML="";items.forEach(name=>{const b=document.createElement("button");b.type="button";b.className="chip"+(name===current?" on":"");b.textContent=name;b.onclick=()=>onpick(name);el.appendChild(b);});}
-function setHero(b){if(!b){document.getElementById("heroTitle").textContent="没有匹配的课本";document.getElementById("heroSub").textContent="";document.getElementById("heroMeta").textContent="";document.getElementById("readBtn").disabled=true;return;}
+function setHero(b){if(!b){document.getElementById("heroTitle").textContent="没有匹配的课本";document.getElementById("readBtn").disabled=true;return;}
 paint(document.getElementById("heroBg"),b);
 document.getElementById("heroSub").textContent=[b.stage,gradeOf(b)==="其他"?"":gradeOf(b),b.subject,b.edition].filter(Boolean).join(" · ");
 document.getElementById("heroTitle").textContent=shortName(b.name);
@@ -104,20 +112,32 @@ el.onclick=()=>{if(state.idx===i&&canRead(b))openAt(i);else{state.idx=i;sync(tru
 if(!books.length)rail.innerHTML='<div class="empty">没有课本</div>';sync(false);}
 function sync(smooth){const books=filtered();const b=books[state.idx];setHero(b);
 [...document.getElementById("rail").children].forEach((el,i)=>el.classList.toggle("on",i===state.idx));
-document.getElementById("hint").innerHTML=b?("左右滑封面　<b>"+(state.idx+1)+"</b> / "+books.length):"没有匹配";
+document.getElementById("hint").innerHTML=b?("左右滑　<b>"+(state.idx+1)+"</b> / "+books.length):"";
 const el=document.getElementById("rail").children[state.idx];if(el)el.scrollIntoView({inline:"center",block:"nearest",behavior:smooth?"smooth":"instant"});}
 function nearest(){const rail=document.getElementById("rail");const mid=rail.scrollLeft+rail.clientWidth/2;let best=0,dist=Infinity;
-[...rail.children].forEach((el,i)=>{const c=el.offsetLeft+el.offsetWidth/2;const d=Math.abs(c-mid);if(d<dist){dist=d;best=i;}});return best;}
+[...rail.children].forEach((el,i)=>{const d=Math.abs(el.offsetLeft+el.offsetWidth/2-mid);if(d<dist){dist=d;best=i;}});return best;}
 let tick=0;document.getElementById("rail").addEventListener("scroll",()=>{clearTimeout(tick);tick=setTimeout(()=>{state.idx=nearest();sync(false);},50);},{passive:true});
 document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim();state.idx=0;render();});
 document.getElementById("readBtn").onclick=()=>openAt(state.idx);
-document.addEventListener("keydown",e=>{
-if(document.getElementById("viewer").classList.contains("show")){if(e.key==="ArrowLeft")step(-1);if(e.key==="ArrowRight")step(1);if(e.key==="Escape")closeView();return;}
-if(e.key==="ArrowLeft"){state.idx=Math.max(0,state.idx-1);sync(true);}if(e.key==="ArrowRight"){state.idx=Math.min(filtered().length-1,state.idx+1);sync(true);}if(e.key==="Enter")openAt(state.idx);});
-function openAt(i){const books=filtered();const b=books[i];if(!canRead(b))return;state.view=i;state.idx=i;
-document.getElementById("vtitle").textContent=shortName(b.name);
-document.getElementById("frame").src="https://mozilla.github.io/pdf.js/web/viewer.html?file="+encodeURIComponent(fileUrl(b));
-document.getElementById("viewer").classList.add("show");sync(true);}
+function flipThen(fromBook,toBook,done){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){done();return;}
+  paint(document.getElementById("flipBack"),fromBook||toBook);
+  paint(document.getElementById("flipFront"),toBook||fromBook);
+  document.getElementById("flipBackLabel").textContent=shortName((fromBook||toBook).name);
+  document.getElementById("flipFrontLabel").textContent=shortName((toBook||fromBook).name);
+  const layer=document.getElementById("flip");layer.classList.remove("turn");layer.classList.add("on");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.add("turn")));
+  setTimeout(()=>{done();setTimeout(()=>layer.classList.remove("on","turn"),80);},460);
+}
+function openAt(i){const books=filtered();const b=books[i];if(!canRead(b))return;
+  const prev=books[state.view]||books[state.idx];state.view=i;state.idx=i;
+  const hero=document.getElementById("hero");hero.classList.remove("turn");void hero.offsetWidth;hero.classList.add("turn");
+  flipThen(prev,b,()=>{
+    document.getElementById("vtitle").textContent=shortName(b.name);
+    document.getElementById("frame").src="https://mozilla.github.io/pdf.js/web/viewer.html?file="+encodeURIComponent(fileUrl(b));
+    document.getElementById("viewer").classList.add("show");sync(true);
+  });
+}
 function closeView(){document.getElementById("viewer").classList.remove("show");document.getElementById("frame").src="about:blank";state.view=-1;}
 function step(d){const books=filtered();let i=state.view+d;while(i>=0&&i<books.length&&!canRead(books[i]))i+=d;if(i>=0&&i<books.length)openAt(i);}
 document.getElementById("close").onclick=closeView;document.getElementById("prev").onclick=()=>step(-1);document.getElementById("next").onclick=()=>step(1);
@@ -128,9 +148,6 @@ fetch("./catalog.json").then(r=>r.ok?r.json():Promise.reject()).then(d=>{state.b
 .catch(()=>{state.books=[
 {name:"数学一年级上册",path:"小学/数学/人教版/数学一年级上册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:50154321,split:false},
 {name:"数学二年级上册",path:"小学/数学/人教版/数学二年级上册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:30000000,split:false},
-{name:"数学六年级下册",path:"小学/数学/人教版/数学六年级下册.pdf",stage:"小学",subject:"数学",edition:"人教版",size:13134464,split:false},
-{name:"语文一年级上册",path:"小学/语文/统编版/语文一年级上册.pdf",stage:"小学",subject:"语文",edition:"统编版",size:42000000,split:false},
-{name:"英语三年级上册",path:"小学/英语/人教版/英语三年级上册.pdf",stage:"小学",subject:"英语",edition:"人教版",size:28000000,split:false}
+{name:"语文一年级上册",path:"小学/语文/统编版/语文一年级上册.pdf",stage:"小学",subject:"语文",edition:"统编版",size:42000000,split:false}
 ];render();});
-</script>
-</body></html>
+</script></body></html>
